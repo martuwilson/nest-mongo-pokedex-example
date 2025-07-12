@@ -1,4 +1,4 @@
-# 🚀 Pokédx API
+# 🚀 Pokedex API
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png" width="120" alt="Pikachu" />
