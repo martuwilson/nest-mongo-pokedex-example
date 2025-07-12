@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { AppController } from './app.controller';
+import { PokemonModule } from './pokemon/pokemon.module';
 
 @Module({
   imports: [
@@ -9,6 +10,7 @@ import { AppController } from './app.controller';
       rootPath: join(__dirname, '..', 'public'),
       serveRoot: '/',
     }),
+    PokemonModule,
   ],
   controllers: [AppController],
   providers: [],
