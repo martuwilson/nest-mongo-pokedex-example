@@ -1,11 +1,19 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
   // Configurar prefijo global para todas las rutas
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix('api/v2');
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    })
+  )
   
   // Habilitar CORS para desarrollo
   app.enableCors({
