@@ -10,7 +10,7 @@ export class Pokemon extends Document {
     @Prop({ required: true, unique: true })
     no: number;
     
-    @Prop({ required: true })
+    /* @Prop({ required: true })
     type: string;
     
     @Prop({ required: true })
@@ -26,7 +26,7 @@ export class Pokemon extends Document {
     defense: number;
     
     @Prop({ required: true })
-    speed: number;
+    speed: number; */
 
 }
 
