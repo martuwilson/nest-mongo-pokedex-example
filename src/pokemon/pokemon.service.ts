@@ -24,13 +24,7 @@ export class PokemonService {
       return createdPokemon;
     
     } catch (error) {
-      if(error.code === 11000) {
-        // Manejar error de duplicado
-        throw new BadRequestException(`El Pokémon con el nombre ${createPokemonDto.name} ya existe.`);
-      } else {
-        // Manejar otros errores
-        throw new InternalServerErrorException(`Error al crear el Pokémon: ${error.message}`);
-      }
+      this.handleExceptions(error);
     }
 
   }
@@ -88,19 +82,21 @@ export class PokemonService {
 
       return updatedPokemon;
     } catch (error) {
-      if (error.code === 11000) {
-        // Manejar error de duplicado
-        const duplicatedKey = Object.keys(error.keyValue)[0];
-        const duplicatedValue = error.keyValue[duplicatedKey];
-        throw new BadRequestException(`Ya existe un Pokémon con ${duplicatedKey}: ${duplicatedValue}`);
-      } else {
-        // Manejar otros errores
-        throw new InternalServerErrorException(`Error al actualizar el Pokémon: ${error.message}`);
-      }
+      this.handleExceptions(error);
     }
   }
 
   remove(id: number) {
     return `This action removes a #${id} pokemon`;
+  }
+
+  private handleExceptions(error: any) {
+    if (error.code === 11000) {
+      const duplicatedKey = Object.keys(error.keyValue)[0];
+      const duplicatedValue = error.keyValue[duplicatedKey];
+      throw new BadRequestException(`Ya existe un Pokémon con ${duplicatedKey}: ${duplicatedValue}`);
+    } else {
+      throw new InternalServerErrorException(`Error al procesar la solicitud: ${error.message}`);
+    }
   }
 }
