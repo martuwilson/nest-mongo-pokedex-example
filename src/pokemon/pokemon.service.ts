@@ -86,8 +86,19 @@ export class PokemonService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} pokemon`;
+  async remove(term: string) {
+    // Primero buscamos el Pokemon usando nuestro método findOneBy
+    const pokemon = await this.findOneBy(term);
+    
+    try {
+      // Eliminar el Pokemon de la base de datos
+      await this.pokemonModel.findByIdAndDelete(pokemon._id);
+      
+      // Retornar el Pokemon eliminado para confirmación
+      return pokemon;
+    } catch (error) {
+      this.handleExceptions(error);
+    }
   }
 
   private handleExceptions(error: any) {
