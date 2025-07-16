@@ -66,8 +66,38 @@ export class PokemonService {
     return pokemon;
   }
 
-  update(id: number, updatePokemonDto: UpdatePokemonDto) {
-    return `This action updates a #${id} pokemon`;
+  async update(term: string, updatePokemonDto: UpdatePokemonDto) {
+    // Primero buscamos el Pokemon usando nuestro método findOneBy
+    const pokemon = await this.findOneBy(term);
+    
+    try {
+      // Normalizar el nombre si viene en el DTO
+      if (updatePokemonDto.name) {
+        updatePokemonDto.name = updatePokemonDto.name.toLowerCase();
+      }
+
+      // Actualizar el Pokemon en la base de datos
+      const updatedPokemon = await this.pokemonModel.findByIdAndUpdate(
+        pokemon._id,
+        updatePokemonDto,
+        { 
+          new: true, // Retorna el documento actualizado
+          runValidators: true // Ejecuta las validaciones del schema
+        }
+      );
+
+      return updatedPokemon;
+    } catch (error) {
+      if (error.code === 11000) {
+        // Manejar error de duplicado
+        const duplicatedKey = Object.keys(error.keyValue)[0];
+        const duplicatedValue = error.keyValue[duplicatedKey];
+        throw new BadRequestException(`Ya existe un Pokémon con ${duplicatedKey}: ${duplicatedValue}`);
+      } else {
+        // Manejar otros errores
+        throw new InternalServerErrorException(`Error al actualizar el Pokémon: ${error.message}`);
+      }
+    }
   }
 
   remove(id: number) {
