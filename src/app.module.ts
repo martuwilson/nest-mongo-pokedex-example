@@ -4,6 +4,7 @@ import { join } from 'path';
 import { AppController } from './app.controller';
 import { PokemonModule } from './pokemon/pokemon.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -15,6 +16,8 @@ import { MongooseModule } from '@nestjs/mongoose';
     MongooseModule.forRoot(process.env.MONGODB_URI || 'mongodb://localhost:27017/nest-pokemon'),
 
     PokemonModule,
+
+    SeedModule,
   ],
   controllers: [AppController],
   providers: [],
